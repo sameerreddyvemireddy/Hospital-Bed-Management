@@ -1,53 +1,35 @@
-# Frontend Application
+# Backend Server
 
 ## Files
-- `index.html` - Main HTML interface
-- `app.js` - Application logic + API calls
-- `style.css` - Styling and layout
+- `HospitalServer.java` - Source code (6.8 KB)
+- `HospitalServer.class` - Compiled Java class
 
-## Run Frontend
-
-Open `index.html` in your browser:
+## Run Backend
 
 ```bash
-open index.html
+java -cp . HospitalServer
 ```
 
-Or use file path:
+Server runs on: `http://localhost:8080/api`
+
+## API Endpoints
+
 ```
-file:///Users/vsameerreddy/Desktop/hospital-dashboard/frontend/index.html
-```
-
-## Features
-
-✅ **10 Dashboard Modules**
-1. Bed Map - Visual bed layout
-2. Ward Filter - Ward overview
-3. Admit/Discharge - Patient management
-4. Transfer Flow - Patient transfers
-5. Maintenance - Bed maintenance tracking
-6. Capacity Chart - Analytics & charts
-7. Alert System - Real-time alerts
-8. Patient History - Medical records
-9. Export Data - CSV downloads
-10. Admin Panel - User management
-
-✅ **Authentication**
-- Login with 3 user roles
-- Password reset with OTP
-- User registration
-- Session management
-
-## API Configuration
-
-Backend URL is configured in `app.js`:
-```javascript
-const API_BASE = 'http://localhost:8080/api';
+POST   /auth/login              - Login user
+POST   /auth/register           - Register user
+GET    /beds                    - Get all beds
+GET    /beds/stats              - Get statistics
+GET    /patients                - Get all patients
+POST   /patients/admit          - Admit patient
+POST   /patients/{id}/discharge - Discharge patient
+GET    /transfers               - Get transfer logs
+POST   /transfers               - Transfer patient
+GET    /maintenance             - Get maintenance logs
+POST   /maintenance             - Add maintenance
+GET    /alerts                  - Get alerts
 ```
 
-**Make sure backend is running before opening frontend!**
-
-## Login Credentials
+## Demo Credentials
 
 | Role | Username | Password |
 |------|----------|----------|
@@ -55,11 +37,15 @@ const API_BASE = 'http://localhost:8080/api';
 | Doctor | doctor | password123 |
 | Nurse | nurse | password123 |
 
-## Technology
+## Data
 
-- HTML5
-- CSS3
-- Vanilla JavaScript (ES6+)
-- Fetch API for backend communication
-- FontAwesome icons
-- Chart.js for analytics
+- **No Database Required** - All data in memory
+- **120+ Beds** across 5 wards (ICU, General, Pediatric, Maternity, Emergency)
+- **55+ Patients** with realistic medical data
+- **Real-time Statistics** - Occupancy, availability, maintenance tracking
+
+## Compile (if needed)
+
+```bash
+javac HospitalServer.java
+```
