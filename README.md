@@ -1,138 +1,65 @@
-# 🏥 Hospital Bed Management Dashboard
+# Frontend Application
 
-Complete healthcare management system with **Java backend** and **JavaScript frontend**.
+## Files
+- `index.html` - Main HTML interface
+- `app.js` - Application logic + API calls
+- `style.css` - Styling and layout
 
----
+## Run Frontend
 
-## 📁 Folder Structure
+Open `index.html` in your browser:
 
-```
-hospital-dashboard/
-│
-├── backend/
-│   ├── HospitalServer.java      (Source code)
-│   ├── HospitalServer.class     (Compiled)
-│   ├── *.class                  (Other compiled classes)
-│   └── README.md                (Backend instructions)
-│
-├── frontend/
-│   ├── index.html               (Main UI)
-│   ├── app.js                   (Logic + API calls)
-│   ├── style.css                (Styling)
-│   └── README.md                (Frontend instructions)
-│
-└── README.md                    (This file)
-```
-
----
-
-## 🚀 Quick Start
-
-### Step 1: Start Backend Server
-
-Open **Terminal**:
 ```bash
-cd /Users/vsameerreddy/Desktop/hospital-dashboard/backend
-java -cp . HospitalServer
+open index.html
 ```
 
-You should see: **✅ Backend running on http://localhost:8080/api**
-
-### Step 2: Open Frontend
-
-In **Browser**, open:
+Or use file path:
 ```
 file:///Users/vsameerreddy/Desktop/hospital-dashboard/frontend/index.html
 ```
 
-Or use terminal:
-```bash
-open /Users/vsameerreddy/Desktop/hospital-dashboard/frontend/index.html
+## Features
+
+✅ **10 Dashboard Modules**
+1. Bed Map - Visual bed layout
+2. Ward Filter - Ward overview
+3. Admit/Discharge - Patient management
+4. Transfer Flow - Patient transfers
+5. Maintenance - Bed maintenance tracking
+6. Capacity Chart - Analytics & charts
+7. Alert System - Real-time alerts
+8. Patient History - Medical records
+9. Export Data - CSV downloads
+10. Admin Panel - User management
+
+✅ **Authentication**
+- Login with 3 user roles
+- Password reset with OTP
+- User registration
+- Session management
+
+## API Configuration
+
+Backend URL is configured in `app.js`:
+```javascript
+const API_BASE = 'http://localhost:8080/api';
 ```
 
-### Step 3: Login
+**Make sure backend is running before opening frontend!**
+
+## Login Credentials
 
 | Role | Username | Password |
 |------|----------|----------|
-| **Admin** | admin | password123 |
-| **Doctor** | doctor | password123 |
-| **Nurse** | nurse | password123 |
+| Admin | admin | password123 |
+| Doctor | doctor | password123 |
+| Nurse | nurse | password123 |
 
----
+## Technology
 
-## ✨ Key Features
-
-✅ Java Backend (no database required)
-✅ 120+ Hospital Beds
-✅ 55+ Patients with medical data
-✅ 10 Dashboard Modules
-✅ Real-time Statistics
-✅ Patient Management
-✅ Bed Tracking
-✅ Maintenance Requests
-✅ Alert System
-✅ CSV Export
-
----
-
-## 📡 Backend API
-
-Server runs on: `http://localhost:8080/api`
-
-Main endpoints:
-- `/auth/login` - Login
-- `/beds` - Get beds
-- `/beds/stats` - Statistics
-- `/patients` - Get patients
-- `/patients/admit` - Admit patient
-- `/patients/{id}/discharge` - Discharge patient
-- `/transfers` - Transfer logs
-- `/maintenance` - Maintenance requests
-
----
-
-## 🔧 Technology
-
-- **Backend**: Java (Pure HTTP server)
-- **Frontend**: HTML5 + CSS3 + JavaScript
-- **Data**: In-memory (no database)
-- **Icons**: FontAwesome
-- **Charts**: Chart.js
-
----
-
-## �� Data
-
-- **Beds**: 120 total across 5 wards
-- **Patients**: 55+ active patients
-- **Doctors**: 6 healthcare providers
-- **Data**: Real-time statistics and tracking
-
----
-
-## ⚠️ Important
-
-1. Start **backend first** before opening frontend
-2. Backend runs on **port 8080**
-3. Data resets when backend restarts
-4. No database needed - all in-memory
-
----
-
-## 📂 File Locations
-
-- Backend: `/Users/vsameerreddy/Desktop/hospital-dashboard/backend/`
-- Frontend: `/Users/vsameerreddy/Desktop/hospital-dashboard/frontend/`
-
----
-
-## ✅ Status
-
-✅ Backend: Compiled & Ready
-✅ Frontend: Ready to Use
-✅ No Database Required
-✅ Ready for Production
-
----
-
-**Everything is organized in one folder!** 🎉
+- HTML5
+- CSS3
+- Vanilla JavaScript (ES6+)
+- Fetch API for backend communication
+- FontAwesome icons
+- Chart.js for analytics
