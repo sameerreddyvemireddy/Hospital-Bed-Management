@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MediCore – Hospital Bed Management</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body>
+
+<!-- ============================================================
+     AUTH PAGE  (Login / Register / Forgot Password)
+     ============================================================ -->
+<div id="authPage" class="auth-page">
+  <div class="auth-bg">
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
+    <div class="orb orb3"></div>
+  </div>
+
+  <div class="auth-card">
+
+    <!-- Brand header (always visible) -->
+    <div class="brand">
+      <div class="brand-icon" id="brandIcon"><i class="fas fa-hospital-user"></i></div>
+      <h1 id="brandTitle">MediCore</h1>
+      <p id="brandSub">Hospital Bed Management System</p>
+    </div>
+
+    <!-- Tab pills -->
+    <div class="auth-tabs" id="authTabs">
+      <button class="auth-tab active" id="tabLogin" onclick="showView('login')">Sign In</button>
+      <button class="auth-tab" id="tabRegister" onclick="showView('register')">Create Account</button>
+    </div>
+
+    <!-- ── VIEW: LOGIN ── -->
+    <div id="viewLogin" class="auth-view">
+      <form id="loginForm" onsubmit="doLogin(event)">
+        <div class="field">
+          <label>Username</label>
+          <div class="input-wrap">
+            <i class="fas fa-user"></i>
+            <input type="text" id="lUser" placeholder="admin / doctor / nurse" autocomplete="off"/>
+          </div>
+        </div>
+        <div class="field">
+          <label>Password</label>
+          <div class="input-wrap">
+            <i class="fas fa-lock"></i>
+            <input type="password" id="lPass" placeholder="Enter your password"/>
+            <button type="button" class="eye-btn" onclick="toggleEye('lPass',this)"><i class="fas fa-eye"></i></button>
+          </div>
+        </div>
+        <div class="field">
+          <label>Role</label>
+          <div class="input-wrap">
+            <i class="fas fa-id-badge"></i>
+            <select id="lRole">
+              <option value="admin">Admin</option>
+              <option value="doctor">Doctor</option>
+              <option value="nurse">Nurse</option>
+            </select>
+          </div>
+        </div>
+        <div class="row-between">
+          <label class="check-label"><input type="checkbox" id="remember"/> Remember me</label>
+          <button type="button" class="text-link" onclick="showView('forgot')">Forgot password?</button>
+        </div>
+        <div id="loginMsg" class="msg hidden"></div>
+        <button type="submit" class="btn-auth">Sign In <i class="fas fa-arrow-right"></i></button>
+      </form>
+      <p class="hint">Demo credentials: <strong>admin / password123</strong></p>
+    </div>
+
+    <!-- ── VIEW: REGISTER ── -->
+    <div id="viewRegister" class="auth-view hidden">
+      <form id="registerForm" onsubmit="doRegister(event)">
+        <div class="field-row">
+          <div class="field">
+            <label>Full Name</label>
+            <div class="input-wrap">
+              <i class="fas fa-id-card"></i>
+              <input type="text" id="rName" placeholder="Your full name"/>
+            </div>
+          </div>
+          <div class="field">
+            <label>Email</label>
+            <div class="input-wrap">
+              <i class="fas fa-envelope"></i>
+              <input type="email" id="rEmail" placeholder="your@email.com"/>
+            </div>
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>Username</label>
+            <div class="input-wrap">
+              <i class="fas fa-user"></i>
+              <input type="text" id="rUser" placeholder="Choose username" autocomplete="off"/>
+            </div>
+          </div>
+          <div class="field">
+            <label>Role</label>
+            <div class="input-wrap">
+              <i class="fas fa-id-badge"></i>
+              <select id="rRole">
+                <option value="doctor">Doctor</option>
+                <option value="nurse">Nurse</option>
+                <option value="admin">Admin</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="field">
+          <label>Department</label>
+          <div class="input-wrap">
+            <i class="fas fa-hospital"></i>
+            <input type="text" id="rDept" placeholder="e.g. ICU, General, Pediatric"/>
+          </div>
+        </div>
+        <div class="field">
+          <label>Password</label>
+          <div class="input-wrap">
+            <i class="fas fa-lock"></i>
+            <input type="password" id="rPass" placeholder="Min 8 characters" oninput="strengthCheck(this.value)"/>
+            <button type="button" class="eye-btn" onclick="toggleEye('rPass',this)"><i class="fas fa-eye"></i></button>
+          </div>
+          <div class="strength-row">
+            <div class="strength-track"><div id="strengthBar"></div></div>
+            <span id="strengthTxt">—</span>
+          </div>
+        </div>
+        <div class="field">
+          <label>Confirm Password</label>
+          <div class="input-wrap">
+            <i class="fas fa-lock"></i>
+            <input type="password" id="rConfirm" placeholder="Re-enter password"/>
+            <button type="button" class="eye-btn" onclick="toggleEye('rConfirm',this)"><i class="fas fa-eye"></i></button>
+          </div>
+        </div>
+        <div id="registerMsg" class="msg hidden"></div>
+        <button type="submit" class="btn-auth btn-purple">Create Account <i class="fas fa-user-plus"></i></button>
+      </form>
+    </div>
+
+    <!-- ── VIEW: FORGOT PASSWORD ── -->
+    <div id="viewForgot" class="auth-view hidden">
+
+      <!-- Step 1 -->
+      <div id="fStep1">
+        <form id="forgotForm" onsubmit="doForgot(event)">
+          <p class="step-info"><i class="fas fa-info-circle"></i> Enter your registered email. We'll show you a reset code (demo).</p>
+          <div class="field">
+            <label>Email Address</label>
+            <div class="input-wrap">
+              <i class="fas fa-envelope"></i>
+              <input type="email" id="fEmail" placeholder="your@email.com"/>
+            </div>
+          </div>
+          <div class="field">
+            <label>Role</label>
+            <div class="input-wrap">
+              <i class="fas fa-id-badge"></i>
+              <select id="fRole">
+                <option value="admin">Admin</option>
+                <option value="doctor">Doctor</option>
+                <option value="nurse">Nurse</option>
+              </select>
+            </div>
+          </div>
+          <div id="forgotMsg" class="msg hidden"></div>
+          <button type="submit" class="btn-auth btn-sky">Send Reset Code <i class="fas fa-paper-plane"></i></button>
+        </form>
+      </div>
+
+      <!-- Step 2 (hidden until code is sent) -->
+      <div id="fStep2" class="hidden">
+        <div class="otp-notice" id="otpNotice"></div>
+        <form id="resetForm" onsubmit="doReset(event)">
+          <div class="field">
+            <label>Enter 6-Digit OTP</label>
+            <div class="otp-row" id="otpRow">
+              <input class="otp-box" maxlength="1" inputmode="numeric"/>
+              <input class="otp-box" maxlength="1" inputmode="numeric"/>
+              <input class="otp-box" maxlength="1" inputmode="numeric"/>
+              <input class="otp-box" maxlength="1" inputmode="numeric"/>
+              <input class="otp-box" maxlength="1" inputmode="numeric"/>
+              <input class="otp-box" maxlength="1" inputmode="numeric"/>
+            </div>
+          </div>
+          <div class="field">
+            <label>New Password</label>
+            <div class="input-wrap">
+              <i class="fas fa-lock"></i>
+              <input type="password" id="nPass" placeholder="Min 8 characters"/>
+              <button type="button" class="eye-btn" onclick="toggleEye('nPass',this)"><i class="fas fa-eye"></i></button>
+            </div>
+          </div>
+          <div class="field">
+            <label>Confirm New Password</label>
+            <div class="input-wrap">
+              <i class="fas fa-lock"></i>
+              <input type="password" id="nConfirm" placeholder="Re-enter password"/>
+              <button type="button" class="eye-btn" onclick="toggleEye('nConfirm',this)"><i class="fas fa-eye"></i></button>
+            </div>
+          </div>
+          <div id="resetMsg" class="msg hidden"></div>
+          <button type="submit" class="btn-auth btn-sky">Reset Password <i class="fas fa-check"></i></button>
+        </form>
+      </div>
+
+      <button class="back-link" onclick="showView('login')"><i class="fas fa-arrow-left"></i> Back to Sign In</button>
+    </div>
+
+  </div><!-- end auth-card -->
+</div><!-- end authPage -->
+
+
+<!-- ============================================================
+     DASHBOARD
+     ============================================================ -->
+<div id="dashboard" class="dashboard hidden">
+
+  <!-- SIDEBAR -->
+  <aside id="sidebar" class="sidebar">
+    <div class="sb-brand">
+      <div class="sb-logo"><i class="fas fa-hospital-user"></i></div>
+      <span>MediCore</span>
+    </div>
+    <nav class="sb-nav">
+      <a class="nav-item active" data-mod="bedMap"      href="#"><i class="fas fa-bed"></i><span>Bed Map</span></a>
+      <a class="nav-item"        data-mod="wardFilter"  href="#"><i class="fas fa-layer-group"></i><span>Ward Filter</span></a>
+      <a class="nav-item"        data-mod="admitDis"    href="#"><i class="fas fa-file-medical"></i><span>Admit / Discharge</span></a>
+      <a class="nav-item"        data-mod="transfer"    href="#"><i class="fas fa-exchange-alt"></i><span>Transfer Flow</span></a>
+      <a class="nav-item"        data-mod="maintenance" href="#"><i class="fas fa-tools"></i><span>Maintenance</span></a>
+      <a class="nav-item"        data-mod="capacity"    href="#"><i class="fas fa-chart-bar"></i><span>Capacity Chart</span></a>
+      <a class="nav-item"        data-mod="alerts"      href="#"><i class="fas fa-bell"></i><span>Alerts</span><span id="alertBadge" class="badge">3</span></a>
+      <a class="nav-item"        data-mod="history"     href="#"><i class="fas fa-history"></i><span>History</span></a>
+      <a class="nav-item"        data-mod="export"      href="#"><i class="fas fa-download"></i><span>Export</span></a>
+      <a class="nav-item"        data-mod="admin"       href="#"><i class="fas fa-cogs"></i><span>Admin Panel</span></a>
+    </nav>
+    <div class="sb-footer">
+      <div class="sb-user">
+        <div class="sb-avatar" id="sbAvatar">A</div>
+        <div>
+          <p id="sbName">Admin User</p>
+          <small id="sbRole">Administrator</small>
+        </div>
+      </div>
+      <button class="logout-btn" onclick="doLogout()"><i class="fas fa-sign-out-alt"></i></button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <!-- Topbar -->
+    <header class="topbar">
+      <div class="tb-left">
+        <button class="ham-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+        <span class="tb-title" id="tbTitle">Bed Map</span>
+      </div>
+      <div class="tb-right">
+        <div class="live-pill"><span class="dot-pulse"></span>LIVE</div>
+        <div class="clock" id="clock"></div>
+        <div class="bell-wrap" onclick="openMod('alerts')">
+          <i class="fas fa-bell"></i><span class="bell-dot"></span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Stat Strip -->
+    <section class="stats">
+      <div class="stat-card c-blue">
+        <div class="sc-icon"><i class="fas fa-bed"></i></div>
+        <div><div class="sc-val" id="sTot">120</div><div class="sc-lbl">Total Beds</div></div>
+      </div>
+      <div class="stat-card c-green">
+        <div class="sc-icon"><i class="fas fa-check-circle"></i></div>
+        <div><div class="sc-val" id="sAvail">38</div><div class="sc-lbl">Available</div></div>
+      </div>
+      <div class="stat-card c-orange">
+        <div class="sc-icon"><i class="fas fa-user-injured"></i></div>
+        <div><div class="sc-val" id="sOcc">72</div><div class="sc-lbl">Occupied</div></div>
+      </div>
+      <div class="stat-card c-red">
+        <div class="sc-icon"><i class="fas fa-wrench"></i></div>
+        <div><div class="sc-val" id="sMaint">10</div><div class="sc-lbl">Maintenance</div></div>
+      </div>
+      <div class="stat-card c-purple">
+        <div class="sc-icon"><i class="fas fa-percent"></i></div>
+        <div><div class="sc-val" id="sRate">60%</div><div class="sc-lbl">Occupancy</div></div>
+      </div>
+    </section>
+
+    <!-- Module Container -->
+    <div class="mod-area">
+
+      <!-- MODULE 1: BED MAP -->
+      <section id="mod-bedMap" class="mod active">
+        <div class="mod-head">
+          <h2><i class="fas fa-bed"></i> Bed Map</h2>
+          <select id="bmWard" onchange="renderBedMap()">
+            <option value="all">All Wards</option>
+            <option>ICU</option><option>General</option>
+            <option>Pediatric</option><option>Maternity</option><option>Emergency</option>
+          </select>
+        </div>
+        <div class="bed-legend">
+          <span class="ld avail"></span>Available
+          <span class="ld occ"></span>Occupied
+          <span class="ld maint"></span>Maintenance
+          <span class="ld reserved"></span>Reserved
+        </div>
+        <div id="bedGrid" class="bed-grid"></div>
+        <div id="bedTip" class="bed-tip hidden"></div>
+      </section>
+
+      <!-- MODULE 2: WARD FILTER -->
+      <section id="mod-wardFilter" class="mod hidden">
+        <div class="mod-head"><h2><i class="fas fa-layer-group"></i> Ward Filter</h2></div>
+        <div id="wardCards" class="ward-cards"></div>
+        <div id="wardDetail" class="ward-detail"></div>
+      </section>
+
+      <!-- MODULE 3: ADMIT / DISCHARGE -->
+      <section id="mod-admitDis" class="mod hidden">
+        <div class="mod-head"><h2><i class="fas fa-file-medical"></i> Admit / Discharge</h2></div>
+        <div class="form-tabs">
+          <button class="ftab active" onclick="switchTab('admit',this)">Admit Patient</button>
+          <button class="ftab" onclick="switchTab('discharge',this)">Discharge Patient</button>
+        </div>
+        <!-- Admit -->
+        <div id="admitForm" class="pform">
+          <div class="frow">
+            <div class="fg"><label>Patient Name</label><input type="text" id="aName" placeholder="Full name"/></div>
+            <div class="fg"><label>Age</label><input type="number" id="aAge" placeholder="Age" min="0"/></div>
+          </div>
+          <div class="frow">
+            <div class="fg"><label>Gender</label><select id="aGender"><option>Male</option><option>Female</option><option>Other</option></select></div>
+            <div class="fg"><label>Ward</label><select id="aWard" onchange="fillAdmitBeds()"><option>ICU</option><option>General</option><option>Pediatric</option><option>Maternity</option><option>Emergency</option></select></div>
+          </div>
+          <div class="frow">
+            <div class="fg"><label>Bed</label><select id="aBed"></select></div>
+            <div class="fg"><label>Attending Doctor</label><input type="text" id="aDoc" placeholder="Doctor name"/></div>
+          </div>
+          <div class="frow">
+            <div class="fg full"><label>Diagnosis</label><input type="text" id="aDiag" placeholder="Primary diagnosis"/></div>
+          </div>
+          <div class="frow">
+            <div class="fg"><label>Admit Date</label><input type="date" id="aDate"/></div>
+            <div class="fg"><label>Contact</label><input type="text" id="aContact" placeholder="+91 XXXXX XXXXX"/></div>
+          </div>
+          <button class="btn-p" onclick="admitPatient()"><i class="fas fa-user-plus"></i> Admit Patient</button>
+        </div>
+        <!-- Discharge -->
+        <div id="dischargeForm" class="pform hidden">
+          <div class="frow">
+            <div class="fg full"><label>Search Patient</label><input type="text" id="disSearch" placeholder="Name or Patient ID…" oninput="renderDischargeList()"/></div>
+          </div>
+          <div id="disList" class="dis-list"></div>
+        </div>
+      </section>
+
+      <!-- MODULE 4: TRANSFER -->
+      <section id="mod-transfer" class="mod hidden">
+        <div class="mod-head"><h2><i class="fas fa-exchange-alt"></i> Transfer Flow</h2></div>
+        <div class="pform">
+          <div class="frow">
+            <div class="fg"><label>Patient</label><select id="trPat" onchange="fillTransferFrom()"><option value="">Select patient</option></select></div>
+            <div class="fg"><label>Current Location</label><input type="text" id="trFrom" readonly placeholder="Auto-filled"/></div>
+          </div>
+          <div class="frow">
+            <div class="fg"><label>Target Ward</label><select id="trWard" onchange="fillTransferBeds()"><option value="">Select ward</option><option>ICU</option><option>General</option><option>Pediatric</option><option>Maternity</option><option>Emergency</option></select></div>
+            <div class="fg"><label>Target Bed</label><select id="trBed"></select></div>
+          </div>
+          <div class="frow">
+            <div class="fg full"><label>Reason</label><input type="text" id="trReason" placeholder="Reason for transfer"/></div>
+          </div>
+          <button class="btn-p" onclick="doTransfer()"><i class="fas fa-exchange-alt"></i> Execute Transfer</button>
+        </div>
+        <h3 class="sub-h">Recent Transfers</h3>
+        <table class="dtable" id="trTable">
+          <thead><tr><th>Patient</th><th>From</th><th>To</th><th>Reason</th><th>Time</th></tr></thead>
+          <tbody id="trBody"></tbody>
+        </table>
+      </section>
+
+      <!-- MODULE 5: MAINTENANCE -->
+      <section id="mod-maintenance" class="mod hidden">
+        <div class="mod-head">
+          <h2><i class="fas fa-tools"></i> Maintenance</h2>
+          <button class="btn-p btn-sm" onclick="openMaintModal()"><i class="fas fa-plus"></i> Flag Bed</button>
+        </div>
+        <div class="maint-stats">
+          <div class="ms-card"><span id="mOpen">0</span><small>Open</small></div>
+          <div class="ms-card"><span id="mInProg">0</span><small>In Progress</small></div>
+          <div class="ms-card"><span id="mDone">0</span><small>Resolved</small></div>
+        </div>
+        <table class="dtable">
+          <thead><tr><th>Bed</th><th>Ward</th><th>Issue</th><th>Priority</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
+          <tbody id="maintBody"></tbody>
+        </table>
+      </section>
+
+      <!-- MODULE 6: CAPACITY -->
+      <section id="mod-capacity" class="mod hidden">
+        <div class="mod-head"><h2><i class="fas fa-chart-bar"></i> Capacity Chart</h2></div>
+        <div class="chart-grid">
+          <div class="chart-card">
+            <h3>Ward Occupancy</h3>
+            <div id="occBars" class="bar-chart"></div>
+          </div>
+          <div class="chart-card">
+            <h3>Bed Status Breakdown</h3>
+            <div class="donut-wrap">
+              <svg id="donutSvg" viewBox="0 0 200 200" width="180" height="180"></svg>
+              <div id="donutLegend" class="donut-legend"></div>
+            </div>
+          </div>
+          <div class="chart-card chart-full">
+            <h3>7-Day Admissions Trend</h3>
+            <div class="line-wrap"><svg id="lineSvg" viewBox="0 0 700 180" preserveAspectRatio="xMidYMid meet"></svg></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- MODULE 7: ALERTS -->
+      <section id="mod-alerts" class="mod hidden">
+        <div class="mod-head">
+          <h2><i class="fas fa-bell"></i> Alert System</h2>
+          <button class="btn-outline btn-sm" onclick="clearAlerts()">Clear All</button>
+        </div>
+        <div class="alert-filters">
+          <button class="af-btn active" onclick="setAlertFilter('all',this)">All</button>
+          <button class="af-btn" onclick="setAlertFilter('critical',this)">Critical</button>
+          <button class="af-btn" onclick="setAlertFilter('warning',this)">Warning</button>
+          <button class="af-btn" onclick="setAlertFilter('info',this)">Info</button>
+        </div>
+        <div id="alertList" class="alert-list"></div>
+      </section>
+
+      <!-- MODULE 8: HISTORY -->
+      <section id="mod-history" class="mod hidden">
+        <div class="mod-head">
+          <h2><i class="fas fa-history"></i> Patient History</h2>
+          <input type="text" id="histSearch" placeholder="Search…" oninput="renderHistory()"/>
+        </div>
+        <table class="dtable">
+          <thead><tr><th>ID</th><th>Patient</th><th>Ward</th><th>Bed</th><th>Admit</th><th>Discharge</th><th>Doctor</th><th>Status</th></tr></thead>
+          <tbody id="histBody"></tbody>
+        </table>
+      </section>
+
+      <!-- MODULE 9: EXPORT -->
+      <section id="mod-export" class="mod hidden">
+        <div class="mod-head"><h2><i class="fas fa-download"></i> Export Data</h2></div>
+        <div class="export-grid">
+          <div class="exp-card" onclick="doExport('beds')"><i class="fas fa-file-csv"></i><h3>Bed Status CSV</h3><p>Current bed availability & status</p></div>
+          <div class="exp-card" onclick="doExport('patients')"><i class="fas fa-file-csv"></i><h3>Patient List CSV</h3><p>All current & past patient records</p></div>
+          <div class="exp-card" onclick="doExport('history')"><i class="fas fa-file-alt"></i><h3>History Report CSV</h3><p>Discharge & transfer history log</p></div>
+          <div class="exp-card" onclick="doExport('alerts')"><i class="fas fa-file-alt"></i><h3>Alerts Log CSV</h3><p>All system alerts & maintenance flags</p></div>
+        </div>
+        <div class="exp-preview">
+          <h3>Preview</h3>
+          <pre id="expContent">Select an export option above…</pre>
+        </div>
+      </section>
+
+      <!-- MODULE 10: ADMIN -->
+      <section id="mod-admin" class="mod hidden">
+        <div class="mod-head"><h2><i class="fas fa-cogs"></i> Admin Panel</h2></div>
+        <div class="admin-grid">
+          <div class="admin-card">
+            <h3><i class="fas fa-users"></i> User Management</h3>
+            <table class="dtable"><thead><tr><th>Name</th><th>Role</th><th>Status</th><th>Actions</th></tr></thead><tbody id="userBody"></tbody></table>
+            <button class="btn-p btn-sm mt" onclick="addUserDemo()"><i class="fas fa-plus"></i> Add User</button>
+          </div>
+          <div class="admin-card">
+            <h3><i class="fas fa-hospital"></i> Ward Configuration</h3>
+            <table class="dtable"><thead><tr><th>Ward</th><th>Capacity</th><th>Type</th><th>Head</th></tr></thead><tbody id="wardBody"></tbody></table>
+          </div>
+          <div class="admin-card admin-full">
+            <h3><i class="fas fa-sliders-h"></i> System Settings</h3>
+            <div class="settings">
+              <div class="srow"><label>Critical Threshold (%)</label><input type="range" min="50" max="100" value="85" id="critThr" oninput="document.getElementById('critThrVal').textContent=this.value+'%'"/><span id="critThrVal">85%</span></div>
+              <div class="srow"><label>Auto-Alert on Maintenance</label><input type="checkbox" checked/></div>
+              <div class="srow"><label>Refresh Interval (sec)</label><input type="number" value="30" min="5"/></div>
+              <div class="srow"><label>Hospital Name</label><input type="text" value="MediCore City Hospital"/></div>
+            </div>
+            <button class="btn-p mt" onclick="showToast('Settings saved successfully.')"><i class="fas fa-save"></i> Save Settings</button>
+          </div>
+        </div>
+      </section>
+
+    </div><!-- mod-area -->
+  </main>
+</div><!-- dashboard -->
+
+
+<!-- MODAL: Maintenance -->
+<div id="maintModal" class="modal-overlay hidden">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>Flag Bed for Maintenance</h3>
+      <button onclick="closeMaintModal()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="fg"><label>Ward</label><select id="mWard" onchange="fillMaintBeds()"><option>ICU</option><option>General</option><option>Pediatric</option><option>Maternity</option><option>Emergency</option></select></div>
+      <div class="fg"><label>Bed</label><select id="mBed"></select></div>
+      <div class="fg"><label>Issue</label><input type="text" id="mIssue" placeholder="Describe the issue…"/></div>
+      <div class="fg"><label>Priority</label><select id="mPri"><option>High</option><option>Medium</option><option>Low</option></select></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-outline" onclick="closeMaintModal()">Cancel</button>
+      <button class="btn-p" onclick="submitMaint()">Flag Bed</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast" class="toast hidden"><i class="fas fa-check-circle"></i><span id="toastTxt"></span></div>
+
+<script src="app.js"></script>
+</body>
+</html>
